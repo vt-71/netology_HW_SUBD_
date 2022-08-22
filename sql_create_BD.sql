@@ -32,8 +32,10 @@ CREATE TABLE IF NOT EXISTS Tracks(
 CREATE TABLE IF NOT EXISTS Compilations (
   id SERIAL PRIMARY KEY,
   name_compilation VARCHAR(60) UNIQUE NOT NULL,
-  year_compilation INTEGER NOT NULL,
---  CHECK (year_compilation > 1900),
-  track_id INTEGER NOT NULL REFERENCES Tracks(id));
+  year_compilation INTEGER NOT NULL);
 
+CREATE TABLE IF NOT EXISTS Tracks_Compilations (
+  track_id INTEGER NOT NULL REFERENCES Tracks (id),
+  compilation_id INTEGER NOT NULL REFERENCES Compilations (id),
+  CONSTRAINT pk_2 PRIMARY KEY (track_id, compilation_id));
 
