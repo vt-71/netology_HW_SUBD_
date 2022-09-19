@@ -25,12 +25,26 @@ VALUES ('2 Step Chase', 221, 21), ('9+9', 384, 22), ('Audio Santo', 237, 17), ('
 	   ('Overend Show', 238, 18), ('Phone The Lab', 332, 26), ('Photos Of Ghosts', 158, 26), ('Play This Tune', 261, 19), ('Smooth Hound', 134, 16),
        ('Soda', 102, 24), ('Sonic Algebra', 289, 18), ('Trylon And Perisphere', 312, 18), ('Spooky Loops', 213, 19), ('Stiff Manure', 291, 23),
        ('We Love Radio', 102, 22), ('Speaker Bite Me', 271, 22), ('Too Keen', 132, 24), ('Sunday on Monday', 213, 16);
+      
+
 
 
 INSERT INTO collections (track_id, compilation_id)
 VALUES (1, 23), (2, 25), (3, 21), (4, 24), (7, 21), (9, 22), (10, 19), (11, 19), (12, 22), (13, 24), (14, 23), (15, 22), (17, 24), (18, 24),
        (19, 20), (20, 25), (21, 26), (22, 21), (23, 20), (24, 24), (25, 24), (26, 25), (27, 26), (28, 26), (29, 22), (30, 21), (31, 25),
        (32, 25), (33, 25), (34, 25);
+      
+ --Добавил INSERT INTO collections (track_id, compilation_id)
+INSERT INTO collections (track_id, compilation_id)
+VALUES (1, 26), (2, 26), (3, 26);
+
+-- Удалил INSERT INTO collections (track_id, compilation_id)
+--DELETE FROM collections 
+--WHERE (track_id = 1)
+
+--DELETE FROM collections 
+--WHERE (track_id = 23)
+      
 
 INSERT INTO styles (artist_id, genre_id)
 VALUES (10, 15), (11, 15), (12, 14), (13, 14), (14, 13), (15, 12), (16, 13), (16, 15), (9, 11);
