@@ -9,27 +9,32 @@ JOIN albums a  ON t.album_id  = a.album_id
 WHERE a.year_album BETWEEN 2019 AND 2020;
 
 --средняя продолжительность треков по каждому альбому
-SELECT a.year_album,  round(AVG (t.time_track)) FROM tracks t  
+SELECT a.year_album,  ROUND(AVG (t.time_track)) FROM tracks t  
 JOIN albums a  ON t.album_id  = a.album_id 
 GROUP BY a.year_album 
 ORDER BY a.year_album;
 
 --все исполнители, которые не выпустили альбомы в 2020 году
-SELECT ar.name_artist FROM artists ar
+-- SELECT DISTINCT ar.name_artist FROM artists ar
+-- JOIN discographies d  ON ar.artist_id  = d.artist_id  
+-- JOIN albums a ON d.album_id  = a.album_id 
+-- WHERE a.year_album != 2020
+
+SELECT DISTINCT ar.name_artist FROM artists ar
+WHERE ar.name_artist  NOT IN (SELECT ar.name_artist FROM artists ar
 JOIN discographies d  ON ar.artist_id  = d.artist_id  
-JOIN albums a ON d.album_id  = a.album_id 
-WHERE a.year_album != 2020
-GROUP BY ar.name_artist;
+JOIN albums a ON d.album_id  = a.album_id
+WHERE a.year_album = 2020);
 
 --названия сборников, в которых присутствует конкретный исполнитель Kate
-SELECT c.name_compilation  FROM compilations c 
+SELECT DISTINCT c.name_compilation  FROM compilations c 
 JOIN collections col ON c.compilation_id = col.compilation_id 
 JOIN tracks t  ON col.track_id = t.track_id 
 JOIN albums a ON t.album_id  = a.album_id 
 JOIN discographies d ON d.album_id  = a.album_id 
 JOIN artists ar ON ar.artist_id  = d.artist_id  
 WHERE ar.name_artist LIKE '%Kate%'
-GROUP BY c.name_compilation; 
+ORDER  BY c.name_compilation; 
 
 --название альбомов, в которых присутствуют исполнители более 1 жанра
 SELECT a.name_album FROM artists ar 
@@ -43,8 +48,8 @@ HAVING (count(*) > 1);
 --наименование треков, которые не входят в сборники
 SELECT t.name_track   FROM tracks t
 left JOIN collections c  ON t.track_id = c.track_id 
-WHERE c.track_id IS  NULL 
-GROUP BY t.track_id;
+WHERE c.track_id IS  NULL; 
+
 
 --исполнителя(-ей), написавшего самый короткий по продолжительности трек (теоретически таких треков может быть несколько)
 SELECT t.time_track, ar.name_artist FROM tracks t
@@ -56,14 +61,13 @@ HAVING t.time_track = (SELECT MIN(t.time_track) FROM tracks t);
 
 
 --название альбомов, содержащих наименьшее количество треков
-SELECT DISTINCT a.name_album  FROM albums a  
+SELECT a.name_album, COUNT(t.track_id) track  FROM albums a  
 LEFT JOIN tracks t  ON t.album_id = a.album_id 
-WHERE t.album_id IN (SELECT album_id FROM tracks 
-GROUP BY album_id 
-HAVING COUNT(album_id) = (SELECT COUNT(album_id) FROM tracks 
-GROUP BY album_id 
-ORDER BY count
-LIMIT 1))
-ORDER BY a.name_album 
+GROUP BY a.name_album 
+HAVING COUNT(t.track_id) = (
+SELECT COUNT(t.track_id) FROM albums a  
+JOIN tracks t ON t.album_id = a.album_id 
+GROUP BY a.name_album  
+ORDER BY count(t.track_id)
+LIMIT 1)
 
-	
